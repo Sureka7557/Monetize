@@ -1,0 +1,132 @@
+import { icons } from "./icons";
+import { images } from "./images"; 
+
+export const HOME_USER = {
+  name: "Jennifer Collins | CEO of Vertex",
+};
+
+export const HOME_BALANCE = {
+  amount: 2489.48,
+  nextRenewalDate: "2026-03-18T09:00:00.000Z",
+};
+
+export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
+  {
+    id: "spotify",
+    icon: icons.spotify,
+    name: "Spotify",
+    price: 5.99,
+    currency: "USD",
+    daysLeft: 2,
+  },
+  {
+    id: "notion",
+    icon: icons.notion,
+    name: "Notion",
+    price: 12.0,
+    currency: "USD",
+    daysLeft: 8,
+  },
+  {
+    id: "dropbox",
+    icon: icons.dropbox,
+    name: "Dropbox",
+    price: 10.0,
+    currency: "USD",
+    daysLeft: 32,
+  },
+];
+
+
+export const ALL_SUBSCRIPTIONS: UpcomingSubscription[] = [
+  {
+    id: "claude",
+    icon: images.claude,
+    name: "Claude Max",
+    price: 20.0,
+    currency: "USD",
+    daysLeft: 10,
+    renewalDate: "June 25, 2026",
+    category: "AI Tools",
+  },
+  {
+    id: "netflix",
+    icon: images.netflix,
+    name: "Netflix",
+    price: 15.99,
+    currency: "USD",
+    daysLeft: 15,
+    renewalDate: "June 30, 2026",
+    category: "Entertainment",
+  },
+  {
+    id: "youtube",
+    icon: images.youtube,
+    name: "YouTube Premium",
+    price: 13.99,
+    currency: "USD",
+    daysLeft: 5,
+    renewalDate: "June 20, 2026",
+    category: "Entertainment",
+  },
+  {
+    id: "apple_music",
+    icon: images.appleMusic,
+    name: "Apple Music",
+    price: 10.99,
+    currency: "USD",
+    daysLeft: 12,
+    renewalDate: "June 27, 2026",
+    category: "Music",
+  },
+  {
+    id: "adobe",
+    icon: images.adobe,
+    name: "Adobe Creative",
+    price: 54.99,
+    currency: "USD",
+    daysLeft: 18,
+    renewalDate: "July 3, 2026",
+    category: "Design",
+  },
+  {
+    id: "figma",
+    icon: images.figma,
+    name: "Figma",
+    price: 15.0,
+    currency: "USD",
+    daysLeft: 21,
+    renewalDate: "July 6, 2026",
+    category: "Design",
+  },
+  {
+    id: "github",
+    icon: images.github,
+    name: "GitHub Pro",
+    price: 4.0,
+    currency: "USD",
+    daysLeft: 27,
+    renewalDate: "July 12, 2026",
+    category: "Developer",
+  },
+  {
+    id: "hulu",
+    icon: images.hulu,
+    name: "Hulu",
+    price: 17.99,
+    currency: "USD",
+    daysLeft: 9,
+    renewalDate: "June 24, 2026",
+    category: "Entertainment",
+  },
+  {
+    id: "disney",
+    icon: images.disney,
+    name: "Disney+",
+    price: 13.99,
+    currency: "USD",
+    daysLeft: 14,
+    renewalDate: "June 29, 2026",
+    category: "Entertainment",
+  },
+];

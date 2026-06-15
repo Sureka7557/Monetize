@@ -1,86 +1,125 @@
-import { View, Text, Pressable } from "react-native";
-import { router } from "expo-router";
-import Foundation from '@expo/vector-icons/Foundation';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { View, Text, Image, Pressable, ScrollView,TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { images } from "../constants/images";
+import { HOME_USER, HOME_BALANCE, UPCOMING_SUBSCRIPTIONS,ALL_SUBSCRIPTIONS } from "../constants/data";
+import { FONTS } from "../constants/fonts";
+import { formatCurrency } from "../../lib/utils";
+import ListHeading from "../../components/ListHeading";
+import UpcomingSubscriptions from "../../components/UpcomingSubscriptions";
+import { useState } from "react";
+import SubscriptionDetailModal from "@/components/SubscriptionDetailModal";
+
+const COLORS = {
+  background: "#F2DEC7",     
+  card: "#FFFFFF",          
+  cardBorder: "#E1B8A2",    
+  accent: "#CF7D65",         
+  accentGreen: "#6B6D43",   
+  muted: "#ABA66F",         
+  textDark: "#4A3728",      
+  white: "#FFFFFF",
+  softBlue: "#99B4AA",      
+};
+
 export default function HomeScreen() {
+  const nextRenewal = new Date(HOME_BALANCE.nextRenewalDate);
+  const renewalLabel = `${String(nextRenewal.getMonth() + 1).padStart(2, "0")}/${String(
+    nextRenewal.getFullYear()
+  ).slice(-2)}`;
+  const [selectedSub, setSelectedSub] = useState<UpcomingSubscription | null>(null);
   return (
-    <View className="flex-1 items-center justify-center bg-[#071A1A] px-6">
-      <Text className="mb-2 text-4xl font-bold text-[#1DE9B6]">
-        Monetize
-      </Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <ScrollView className="flex-1 px-5 pt-5">
 
-      <Text className="mb-10 text-center text-[#B8D8D8]">
-        Manage all your subscriptions in one place
-      </Text>
+        {/* Header */}
+        <View className="mb-5 flex-row items-center justify-between">
+          <View className="flex-row items-center">
+            <Image
+              source={images.avatar}
+              className="mr-3 h-12 w-12 rounded-full"
+            />
+            <Text style={{ fontFamily: FONTS.semibold, fontSize: 16, color: COLORS.textDark }}>
+              {HOME_USER.name}
+            </Text>
+          </View>
 
-      <Pressable
-        onPress={() => router.push("/onboarding")}
-        className="mb-4 w-56 rounded-xl bg-[#00C896] py-4"
-      >
-        <Text className="text-center text-lg font-semibold text-[#071A1A]">
-          Get Started
-        </Text>
-      </Pressable>
-
-      <Pressable
-        onPress={() => router.push("/(auth)/sign-in")}
-        className="mb-4 w-56 rounded-xl border border-[#00C896] py-4"
-      >
-        <Text className="text-center text-lg font-semibold text-[#00C896]">
-          Sign In
-        </Text>
-      </Pressable>
-
-      <Pressable
-        onPress={() => router.push("/(auth)/sign-up")}
-        className="mb-8 w-56 rounded-xl bg-[#123D3D] py-4"
-      >
-        <Text className="text-center text-lg font-semibold text-white">
-          Create Account
-        </Text>
-      </Pressable>
-
-      <View className="w-full max-w-sm rounded-2xl bg-[#0F2A2A] p-5">
-        <Text className="mb-4 text-lg font-bold text-[#1DE9B6]">
-          Quick Access
-        </Text>
-
-      <Pressable
-        onPress={() => router.push("/subscription-details/spotify")}
-        className="mb-3 flex-row items-center rounded-2xl bg-[#123D3D] p-4"
-      >
-        <View className="mr-4 rounded-full bg-[#00C896] p-3">
-          <Foundation name="music" size={22} color="#071A1A" />
+          <Pressable
+            className="h-10 w-10 items-center justify-center rounded-full"
+            style={{ backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.cardBorder }}
+          >
+            <Text style={{ fontFamily: FONTS.bold, fontSize: 22, color: COLORS.accent }}>
+              +
+            </Text>
+          </Pressable>
         </View>
 
-        <View>
-          <Text className="text-lg font-semibold text-white">
-            Spotify
+        {/* Balance Card */}
+        <View
+          className="mb-6 rounded-3xl p-6"
+          style={{ backgroundColor: COLORS.softBlue }}
+        >
+          <Text
+            className="mb-3"
+            style={{ fontFamily: FONTS.medium, color: "rgba(255,255,255,0.85)" }}
+          >
+            Balance
           </Text>
-          <Text className="text-sm text-[#B8D8D8]">
-            Music Subscription
-          </Text>
+          <View className="flex-row items-center justify-between">
+            <Text style={{ fontFamily: FONTS.bold, fontSize: 36, color: COLORS.white }}>
+              {formatCurrency(HOME_BALANCE.amount)}
+            </Text>
+            <Text style={{ fontFamily: FONTS.medium, color: "rgba(255,255,255,0.85)" }}>
+              {renewalLabel}
+            </Text>
+          </View>
         </View>
-      </Pressable>
 
-      <Pressable
-        onPress={() => router.push("/subscription-details/claude-max")}
-        className="flex-row items-center rounded-2xl bg-[#123D3D] p-4"
-      >
-        <View className="mr-4 rounded-full bg-[#1DE9B6] p-3">
-          <FontAwesome6 name="robot" size={20} color="#071A1A" />
-        </View>
+        {/* Upcoming */}
+        <ListHeading
+          title="Upcoming"
+          onViewAll={() => console.log("View all upcoming")}
+        />
+        <UpcomingSubscriptions items={UPCOMING_SUBSCRIPTIONS} />
 
-        <View>
-          <Text className="text-lg font-semibold text-white">
-            Claude Max
-          </Text>
-          <Text className="text-sm text-[#B8D8D8]">
-            AI Subscription
-          </Text>
-        </View>
-      </Pressable>
+       <View className="mt-8">
+  <ListHeading
+    title="All Subscriptions"
+    onViewAll={() => console.log("View all subscriptions")}
+  />
+</View>
+
+{ALL_SUBSCRIPTIONS.map((sub) => (
+  <TouchableOpacity        // ← was View, now tappable
+    key={sub.id}
+    onPress={() => setSelectedSub(sub)}
+    className="mb-4 flex-row items-center justify-between rounded-2xl p-4"
+    style={{ backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.cardBorder }}
+  >
+    <View className="flex-row items-center">
+      <Image source={sub.icon} className="mr-3 h-12 w-12" resizeMode="contain" />
+      <View>
+        <Text style={{ fontFamily: FONTS.semibold, fontSize: 16, color: COLORS.textDark }}>
+          {sub.name}
+        </Text>
+        <Text style={{ fontFamily: FONTS.regular, color: COLORS.muted }}>
+          {sub.renewalDate ?? `In ${sub.daysLeft} days`}
+        </Text>
       </View>
     </View>
+    <Text style={{ fontFamily: FONTS.bold, fontSize: 16, color: COLORS.accent }}>
+      {formatCurrency(sub.price)}
+    </Text>
+  </TouchableOpacity>
+))}
+
+{/* Modal — place once, outside the map */}
+<SubscriptionDetailModal
+  visible={!!selectedSub}
+  subscription={selectedSub}
+  onClose={() => setSelectedSub(null)}
+/>
+
+      </ScrollView>
+    </SafeAreaView>
   );
 }
