@@ -1,24 +1,25 @@
-import { View, Text, Image, Pressable, ScrollView,TouchableOpacity } from "react-native";
+import { View, Text, Image, Pressable, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../constants/images";
-import { HOME_USER, HOME_BALANCE, UPCOMING_SUBSCRIPTIONS,ALL_SUBSCRIPTIONS } from "../constants/data";
+import { HOME_USER, HOME_BALANCE, UPCOMING_SUBSCRIPTIONS, ALL_SUBSCRIPTIONS } from "../constants/data";
 import { FONTS } from "../constants/fonts";
 import { formatCurrency } from "../../lib/utils";
 import ListHeading from "../../components/ListHeading";
 import UpcomingSubscriptions from "../../components/UpcomingSubscriptions";
 import { useState } from "react";
 import SubscriptionDetailModal from "@/components/SubscriptionDetailModal";
+import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 
 const COLORS = {
-  background: "#F2DEC7",     
-  card: "#FFFFFF",          
-  cardBorder: "#E1B8A2",    
-  accent: "#CF7D65",         
-  accentGreen: "#6B6D43",   
-  muted: "#ABA66F",         
-  textDark: "#4A3728",      
+  background: "#F2DEC7",
+  card: "#FFFFFF",
+  cardBorder: "#E1B8A2",
+  accent: "#CF7D65",
+  accentGreen: "#6B6D43",
+  muted: "#ABA66F",
+  textDark: "#4A3728",
   white: "#FFFFFF",
-  softBlue: "#99B4AA",      
+  softBlue: "#99B4AA",
 };
 
 export default function HomeScreen() {
@@ -26,7 +27,37 @@ export default function HomeScreen() {
   const renewalLabel = `${String(nextRenewal.getMonth() + 1).padStart(2, "0")}/${String(
     nextRenewal.getFullYear()
   ).slice(-2)}`;
+
+  const [showCreate, setShowCreate] = useState(false);
   const [selectedSub, setSelectedSub] = useState<UpcomingSubscription | null>(null);
+
+  const [allSubs, setAllSubs] = useState<UpcomingSubscription[]>(ALL_SUBSCRIPTIONS);
+  const [upcomingSubs, setUpcomingSubs] = useState<UpcomingSubscription[]>(UPCOMING_SUBSCRIPTIONS);
+
+  const handleCreate = (newSub: {
+    name: string;
+    price: number;
+    frequency: "Monthly" | "Yearly";
+    category: string;
+  }) => {
+    const created: UpcomingSubscription = {
+      id: `user-${Date.now()}`,
+      name: newSub.name,
+      price: newSub.price,
+      category: newSub.category,
+      currency: "USD",
+      daysLeft: newSub.frequency === "Monthly" ? 30 : 365,
+      renewalDate: "",
+      icon: images.avatar, 
+    };
+
+    // Add to "All Subscriptions" list
+    setAllSubs((prev) => [created, ...prev]);
+
+    // Also add to "Upcoming" (it's brand new, so it is upcoming)
+    setUpcomingSubs((prev) => [created, ...prev]);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
       <ScrollView className="flex-1 px-5 pt-5">
@@ -44,6 +75,7 @@ export default function HomeScreen() {
           </View>
 
           <Pressable
+            onPress={() => setShowCreate(true)}
             className="h-10 w-10 items-center justify-center rounded-full"
             style={{ backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.cardBorder }}
           >
@@ -79,45 +111,50 @@ export default function HomeScreen() {
           title="Upcoming"
           onViewAll={() => console.log("View all upcoming")}
         />
-        <UpcomingSubscriptions items={UPCOMING_SUBSCRIPTIONS} />
+        <UpcomingSubscriptions items={upcomingSubs} />
 
-       <View className="mt-8">
-  <ListHeading
-    title="All Subscriptions"
-    onViewAll={() => console.log("View all subscriptions")}
-  />
-</View>
+        <View className="mt-8">
+          <ListHeading
+            title="All Subscriptions"
+            onViewAll={() => console.log("View all subscriptions")}
+          />
+        </View>
 
-{ALL_SUBSCRIPTIONS.map((sub) => (
-  <TouchableOpacity        // ← was View, now tappable
-    key={sub.id}
-    onPress={() => setSelectedSub(sub)}
-    className="mb-4 flex-row items-center justify-between rounded-2xl p-4"
-    style={{ backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.cardBorder }}
-  >
-    <View className="flex-row items-center">
-      <Image source={sub.icon} className="mr-3 h-12 w-12" resizeMode="contain" />
-      <View>
-        <Text style={{ fontFamily: FONTS.semibold, fontSize: 16, color: COLORS.textDark }}>
-          {sub.name}
-        </Text>
-        <Text style={{ fontFamily: FONTS.regular, color: COLORS.muted }}>
-          {sub.renewalDate ?? `In ${sub.daysLeft} days`}
-        </Text>
-      </View>
-    </View>
-    <Text style={{ fontFamily: FONTS.bold, fontSize: 16, color: COLORS.accent }}>
-      {formatCurrency(sub.price)}
-    </Text>
-  </TouchableOpacity>
-))}
+        {allSubs.map((sub) => (
+          <TouchableOpacity
+            key={sub.id}
+            onPress={() => setSelectedSub(sub)}
+            className="mb-4 flex-row items-center justify-between rounded-2xl p-4"
+            style={{ backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.cardBorder }}
+          >
+            <View className="flex-row items-center">
+              <Image source={sub.icon} className="mr-3 h-12 w-12" resizeMode="contain" />
+              <View>
+                <Text style={{ fontFamily: FONTS.semibold, fontSize: 16, color: COLORS.textDark }}>
+                  {sub.name}
+                </Text>
+                <Text style={{ fontFamily: FONTS.regular, color: COLORS.muted }}>
+                  {sub.renewalDate ?? `In ${sub.daysLeft} days`}
+                </Text>
+              </View>
+            </View>
+            <Text style={{ fontFamily: FONTS.bold, fontSize: 16, color: COLORS.accent }}>
+              {formatCurrency(sub.price)}
+            </Text>
+          </TouchableOpacity>
+        ))}
 
-{/* Modal — place once, outside the map */}
-<SubscriptionDetailModal
-  visible={!!selectedSub}
-  subscription={selectedSub}
-  onClose={() => setSelectedSub(null)}
-/>
+        {/* Modals */}
+        <SubscriptionDetailModal
+          visible={!!selectedSub}
+          subscription={selectedSub}
+          onClose={() => setSelectedSub(null)}
+        />
+        <CreateSubscriptionModal
+          visible={showCreate}
+          onClose={() => setShowCreate(false)}
+          onCreate={handleCreate}
+        />
 
       </ScrollView>
     </SafeAreaView>
