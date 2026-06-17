@@ -11,6 +11,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
 import { tokenCache } from "@/lib/tokenCache";
+import { PostHogProvider } from "posthog-react-native";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -25,12 +26,17 @@ export default function RootLayout() {
   if (!fontsLoaded) return <Text>Loading...</Text>;
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <ClerkLoaded>
-        <SafeAreaProvider>
-          <Stack screenOptions={{ headerShown: false }} />
-        </SafeAreaProvider>
-      </ClerkLoaded>
-    </ClerkProvider>
+    <PostHogProvider
+      apiKey={process.env.EXPO_PUBLIC_POSTHOG_API_KEY!}
+      options={{ host: process.env.EXPO_PUBLIC_POSTHOG_HOST }}
+    >
+      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+        <ClerkLoaded>
+          <SafeAreaProvider>
+            <Stack screenOptions={{ headerShown: false }} />
+          </SafeAreaProvider>
+        </ClerkLoaded>
+      </ClerkProvider>
+    </PostHogProvider>
   );
 }

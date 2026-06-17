@@ -8,7 +8,7 @@ import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { FONTS } from "../constants/fonts";
-
+import { usePostHog } from "posthog-react-native";
 const C = {
   bg: "#F2DEC7", card: "#FFFFFF", border: "#E1B8A2",
   accent: "#CF7D65", muted: "#ABA66F", textDark: "#4A3728",
