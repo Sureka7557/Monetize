@@ -1,17 +1,22 @@
 import { Tabs } from "expo-router";
 import { Entypo, MaterialIcons, Feather } from "@expo/vector-icons";
 import { View, StyleSheet } from "react-native";
+import { useAuth } from "@clerk/clerk-expo";
+import { Redirect } from "expo-router";
 
 const C = {
-  accent: "#CF7D65",                   // terracotta pink — active tab
-  inactive: "#ABA66F",                 // warm sage — inactive
-  tabBar: "#F2DEC7",                   // cream background
-  border: "#E1B8A2",                   // rose border
-  pillBg: "rgba(207,125,101,0.12)",    // soft terracotta pill
+  accent: "#CF7D65",
+  inactive: "#ABA66F",
+  tabBar: "#F2DEC7",
+  border: "#E1B8A2",
+  pillBg: "rgba(207,125,101,0.12)",
   pillBorder: "rgba(207,125,101,0.35)",
 };
 
 function TabIcon({ children, focused }: { children: React.ReactNode; focused: boolean }) {
+  const { isSignedIn, isLoaded } = useAuth();
+  if (!isLoaded) return null;
+  if (!isSignedIn) return <Redirect href="/(auth)/sign-in" />;
   return (
     <View style={[styles.iconWrap, focused && styles.iconWrapActive]}>
       {children}
