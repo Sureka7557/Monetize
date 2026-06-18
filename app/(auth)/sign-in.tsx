@@ -8,14 +8,13 @@ import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { FONTS } from "../constants/fonts";
-import { usePostHog } from "posthog-react-native";
+import { posthog } from "@/lib/postHog";
 const C = {
   bg: "#F2DEC7", card: "#FFFFFF", border: "#E1B8A2",
   accent: "#CF7D65", muted: "#ABA66F", textDark: "#4A3728",
   error: "#C0392B", success: "#5A9A6A", dim: "#D4B99A",
 };
 
-// ─── Reusable field wrapper ──────────────────────────────────────────────────
 function Field({
   label, error, children,
 }: { label: string; error?: string; children: React.ReactNode }) {
@@ -38,7 +37,6 @@ const fStyles = StyleSheet.create({
   errTxt: { fontFamily: FONTS.regular, fontSize: 12, color: C.error },
 });
 
-// ─── Password input with eye toggle ─────────────────────────────────────────
 function PasswordField({
   value, onChange, placeholder = "Password", hasError,
 }: { value: string; onChange: (t: string) => void; placeholder?: string; hasError?: boolean }) {
@@ -75,7 +73,6 @@ const pfStyles = StyleSheet.create({
   input: { flex: 1, fontFamily: FONTS.regular, fontSize: 15, color: C.textDark },
 });
 
-// ─── Forgot password overlay ─────────────────────────────────────────────────
 type FPStep = "email" | "code" | "newpw" | "done";
 
 function ForgotPasswordOverlay({ onClose }: { onClose: () => void }) {
@@ -235,10 +232,8 @@ const fpStyles = StyleSheet.create({
   linkTxt: { fontFamily: FONTS.semibold, fontSize: 14, color: C.accent },
 });
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
-// ─── Main Screen ─────────────────────────────────────────────────────────────
 export default function SignInScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
@@ -265,12 +260,29 @@ export default function SignInScreen() {
       const result = await signIn!.create({ identifier: email.trim(), password });
       if (result.status === "complete") {
         await setActive!({ session: result.createdSessionId });
+
+        // ── PostHog: identify + track sign_in_completed ──────────────────────
+        posthog.identify(result.createdSessionId ?? email.trim(), {
+          email: email.trim(),
+        });
+        posthog.capture("sign_in_completed", {
+          email: email.trim(),
+          method: "email",
+        });
+        await posthog.flush();
+        // ─────────────────────────────────────────────────────────────────────
+
         router.replace("/(tabs)");
       } else {
         setGlobalErr("Additional verification required.");
       }
     } catch (err: any) {
       const msg: string = err.errors?.[0]?.message ?? "Sign in failed";
+
+      // ── PostHog: track sign_in_failed ────────────────────────────────────
+      posthog.capture("sign_in_failed", { error: msg });
+      // ─────────────────────────────────────────────────────────────────────
+
       if (msg.toLowerCase().includes("password")) setPassErr(msg);
       else if (msg.toLowerCase().includes("email") || msg.toLowerCase().includes("identifier")) setEmailErr(msg);
       else setGlobalErr(msg);

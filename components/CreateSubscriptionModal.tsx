@@ -11,6 +11,7 @@ import {
   Platform,
 } from "react-native";
 import { FONTS } from "../app/constants/fonts";
+import { posthog } from "@/lib/postHog";
 
 const COLORS = {
   background: "#F2DEC7",
@@ -61,12 +62,25 @@ export default function CreateSubscriptionModal({
 
   const handleCreate = () => {
     if (!name.trim() || !price.trim() || !category) return;
-    onCreate({
+
+    const priceValue = parseFloat(price);
+
+    const newSubscription = {
       name: name.trim(),
-      price: parseFloat(price),
+      price: priceValue,
       frequency,
       category,
+    };
+
+    onCreate(newSubscription);
+
+    posthog.capture("subscription_created", {
+      subscription_name: name.trim(),
+      subscription_price: priceValue,
+      subscription_frequency: frequency,
+      subscription_category: category,
     });
+
     // Reset
     setName("");
     setPrice("");

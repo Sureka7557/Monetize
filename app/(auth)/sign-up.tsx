@@ -8,6 +8,7 @@ import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { FONTS } from "../constants/fonts";
+import { posthog } from "@/lib/postHog";
 
 const C = {
   bg: "#F2DEC7", card: "#FFFFFF", border: "#E1B8A2",
@@ -178,6 +179,11 @@ export default function SignUpScreen() {
       setPending(true);
     } catch (err: any) {
       const msg: string = err.errors?.[0]?.message ?? "Sign up failed";
+
+      // ── PostHog: track sign_up_failed ────────────────────────────────────
+      posthog.capture("sign_up_failed", { error: msg });
+      // ─────────────────────────────────────────────────────────────────────
+
       if (msg.toLowerCase().includes("email")) setEmailErr(msg);
       else setPassErr(msg);
     } finally { setLoading(false); }
@@ -191,6 +197,18 @@ export default function SignUpScreen() {
       const result = await signUp!.attemptEmailAddressVerification({ code });
       if (result.status === "complete") {
         await setActive!({ session: result.createdSessionId });
+
+        // ── PostHog: identify + track sign_up_completed ──────────────────────
+        posthog.identify(result.createdSessionId ?? email.trim(), {
+          email: email.trim(),
+        });
+        posthog.capture("sign_up_completed", {
+          email: email.trim(),
+          method: "email",
+        });
+        await posthog.flush();
+        // ─────────────────────────────────────────────────────────────────────
+
         router.replace("/(tabs)");
       } else {
         setCodeErr("Verification incomplete. Try again.");

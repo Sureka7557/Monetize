@@ -1,13 +1,14 @@
 import { icons } from "./icons";
-import { images } from "./images"; 
+import { images } from "./images";
 
 export const HOME_USER = {
-  name: "Jennifer Collins | CEO of Vertex",
+  name: "Jennifer Collins",
+  role: "CEO of Vertex",
 };
 
 export const HOME_BALANCE = {
   amount: 2489.48,
-  nextRenewalDate: "2026-03-18T09:00:00.000Z",
+  nextRenewalDate: "2026-06-18T09:00:00.000Z",
 };
 
 export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
@@ -18,6 +19,8 @@ export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
     price: 5.99,
     currency: "USD",
     daysLeft: 2,
+    renewalDate: "June 18, 2026",
+    category: "Music",
   },
   {
     id: "notion",
@@ -26,6 +29,8 @@ export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
     price: 12.0,
     currency: "USD",
     daysLeft: 8,
+    renewalDate: "June 24, 2026",
+    category: "Productivity",
   },
   {
     id: "dropbox",
@@ -34,9 +39,10 @@ export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
     price: 10.0,
     currency: "USD",
     daysLeft: 32,
+    renewalDate: "July 18, 2026",
+    category: "Storage",
   },
 ];
-
 
 export const ALL_SUBSCRIPTIONS: UpcomingSubscription[] = [
   {
