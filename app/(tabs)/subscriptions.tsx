@@ -15,25 +15,30 @@ import { ALL_SUBSCRIPTIONS } from "@/app/constants/data";
 import { Feather } from "@expo/vector-icons";
 
 const COLORS = {
-  background: "#F2DEC7",
+  background: "#F6F8FC",
   card: "#FFFFFF",
-  cardBorder: "#E1B8A2",
-  accent: "#CF7D65",
-  accentGreen: "#6B6D43",
-  muted: "#ABA66F",
-  textDark: "#4A3728",
+  cardBorder: "#E4ECF8",
+
+  accent: "#4D97FF",
+  accentGreen: "#31C48D",
+
+  muted: "#7B8CA8",
+  textDark: "#23395D",
+
   white: "#FFFFFF",
-  softBlue: "#99B4AA",
-  dark: "#2A1F16",
+
+  softBlue: "#5AA7FF",
+
+  dark: "#1A2B4B",
 };
 
 const CARD_COLORS = [
-  "#F5DE8A",
-  "#D9CCF0",
-  "#C8DFF0",
-  "#A8D8C8",
-  "#F5C8C8",
-  "#C8EAD0",
+  "#EAF3FF",
+  "#DCEBFF",
+  "#E8F7F1",
+  "#F0F5FF",
+  "#D6E9FF",
+  "#E4F4FF",
 ];
 
 export default function Subscriptions() {
@@ -77,7 +82,7 @@ export default function Subscriptions() {
             marginBottom: 20,
           }}
         >
-          <Feather name="search" size={18} color={COLORS.muted} style={{ marginRight: 8 }} />
+          <Feather name="search" size={20} color={COLORS.muted} style={{ marginRight: 8 }} />
           <TextInput
             value={search}
             onChangeText={setSearch}
@@ -92,7 +97,7 @@ export default function Subscriptions() {
           />
           {search.length > 0 && (
             <Pressable onPress={() => setSearch("")}>
-              <Feather name="x" size={16} color={COLORS.muted} />
+              <Feather name="x" size={20} color={COLORS.muted} />
             </Pressable>
           )}
         </View>

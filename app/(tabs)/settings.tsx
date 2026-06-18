@@ -8,9 +8,23 @@ import { FONTS } from "../constants/fonts";
 import { Feather } from "@expo/vector-icons";
 
 const C = {
-  bg: "#F2DEC7", card: "#FFFFFF", border: "#E1B8A2",
-  accent: "#CF7D65", muted: "#ABA66F", textDark: "#4A3728",
-  danger: "#C0392B",
+  bg: "#F6F8FC",
+  card: "#FFFFFF",
+  border: "#E4ECF8",
+
+  accent: "#4D97FF",
+  accentGreen: "#31C48D",
+
+  muted: "#7B8CA8",
+  textDark: "#23395D",
+
+  white: "#FFFFFF",
+
+  softBlue: "#5AA7FF",
+
+  dark: "#1A2B4B",
+
+  danger: "#E74C3C",
 };
 
 function SettingsRow({

@@ -10,11 +10,27 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { FONTS } from "../constants/fonts";
 import { posthog } from "@/lib/postHog";
 const C = {
-  bg: "#F2DEC7", card: "#FFFFFF", border: "#E1B8A2",
-  accent: "#CF7D65", muted: "#ABA66F", textDark: "#4A3728",
-  error: "#C0392B", success: "#5A9A6A", dim: "#D4B99A",
-};
+  bg: "#F6F8FC",
+  card: "#FFFFFF",
+  border: "#E4ECF8",
 
+  accent: "#4D97FF",
+  success: "#31C48D",
+
+  muted: "#7B8CA8",
+  textDark: "#23395D",
+
+  white: "#FFFFFF",
+
+  softBlue: "#5AA7FF",
+
+  error: "#E74C3C",
+  dim: "#D6E2F3",
+
+  weak: "#E74C3C",
+  fair: "#F39C12",
+  strong: "#31C48D",
+};
 function Field({
   label, error, children,
 }: { label: string; error?: string; children: React.ReactNode }) {
@@ -296,7 +312,7 @@ export default function SignInScreen() {
           <View style={s.container}>
 
             {/* Logo */}
-            <Image source={require("@/assets/images/monetize.png")} style={s.logo} resizeMode="contain" />
+            <Image source={require("@/assets/images/monetize_logo.png")} style={s.logo} resizeMode="contain" />
 
             <Text style={s.title}>Welcome back</Text>
             <Text style={s.subtitle}>Sign in to your account</Text>

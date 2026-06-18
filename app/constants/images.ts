@@ -1,5 +1,5 @@
 export const images = {
-  avatar: require("../../assets/images/avatar.png"),
+  avatar: require("../../assets/images/jeni.png"),
   claude: require("../../assets/images/claude.png"),
   spotify: require("../../assets/images/spotify.png"),
   notion: require("../../assets/images/notion.png"),

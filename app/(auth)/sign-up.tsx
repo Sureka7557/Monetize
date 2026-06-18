@@ -11,10 +11,26 @@ import { FONTS } from "../constants/fonts";
 import { posthog } from "@/lib/postHog";
 
 const C = {
-  bg: "#F2DEC7", card: "#FFFFFF", border: "#E1B8A2",
-  accent: "#CF7D65", muted: "#ABA66F", textDark: "#4A3728",
-  error: "#C0392B", success: "#5A9A6A", dim: "#D4B99A",
-  weak: "#C0392B", fair: "#E67E22", strong: "#5A9A6A",
+  bg: "#F6F8FC",
+  card: "#FFFFFF",
+  border: "#E4ECF8",
+
+  accent: "#4D97FF",
+  success: "#31C48D",
+
+  muted: "#7B8CA8",
+  textDark: "#23395D",
+
+  white: "#FFFFFF",
+
+  softBlue: "#5AA7FF",
+
+  error: "#E74C3C",
+  dim: "#D6E2F3",
+
+  weak: "#E74C3C",
+  fair: "#F39C12",
+  strong: "#31C48D",
 };
 
 // ─── Field wrapper ────────────────────────────────────────────────────────────
@@ -180,9 +196,7 @@ export default function SignUpScreen() {
     } catch (err: any) {
       const msg: string = err.errors?.[0]?.message ?? "Sign up failed";
 
-      // ── PostHog: track sign_up_failed ────────────────────────────────────
       posthog.capture("sign_up_failed", { error: msg });
-      // ─────────────────────────────────────────────────────────────────────
 
       if (msg.toLowerCase().includes("email")) setEmailErr(msg);
       else setPassErr(msg);
@@ -198,7 +212,6 @@ export default function SignUpScreen() {
       if (result.status === "complete") {
         await setActive!({ session: result.createdSessionId });
 
-        // ── PostHog: identify + track sign_up_completed ──────────────────────
         posthog.identify(result.createdSessionId ?? email.trim(), {
           email: email.trim(),
         });
@@ -207,7 +220,6 @@ export default function SignUpScreen() {
           method: "email",
         });
         await posthog.flush();
-        // ─────────────────────────────────────────────────────────────────────
 
         router.replace("/(tabs)");
       } else {
@@ -227,13 +239,12 @@ export default function SignUpScreen() {
     }
   };
 
-  // ── OTP verification screen ─────────────────────────────────────────────
   if (pending) {
     return (
       <KeyboardAvoidingView style={s.root} behavior={Platform.OS === "ios" ? "padding" : undefined}>
         <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
           <View style={s.container}>
-            <Image source={require("@/assets/images/monetize.png")} style={s.logo} resizeMode="contain" />
+            <Image source={require("@/assets/images/monetize_logo.png")} style={s.logo} resizeMode="contain" />
 
             <View style={s.otpIconWrap}>
               <Feather name="inbox" size={32} color={C.accent} />
@@ -298,8 +309,8 @@ export default function SignUpScreen() {
       <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
         <View style={s.container}>
 
-          {/* Logo */}
-          <Image source={require("@/assets/images/monetize.png")} style={s.logo} resizeMode="contain" />
+          
+          <Image source={require("@/assets/images/monetize_logo.png")} style={s.logo} resizeMode="contain" />
           <Text style={s.title}>Create account</Text>
           <Text style={s.subtitle}>Start tracking your subscriptions</Text>
 

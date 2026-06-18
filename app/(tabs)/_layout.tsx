@@ -5,12 +5,14 @@ import { useAuth } from "@clerk/clerk-expo";
 import { Redirect } from "expo-router";
 
 const C = {
-  accent: "#CF7D65",
-  inactive: "#ABA66F",
-  tabBar: "#F2DEC7",
-  border: "#E1B8A2",
-  pillBg: "rgba(207,125,101,0.12)",
-  pillBorder: "rgba(207,125,101,0.35)",
+  accent: "#4D97FF",
+  inactive: "#7B8CA8",
+
+  tabBar: "#F6F8FC",
+  border: "#E4ECF8",
+
+  pillBg: "rgba(77,151,255,0.12)",
+  pillBorder: "rgba(77,151,255,0.35)",
 };
 
 function TabIcon({ children, focused }: { children: React.ReactNode; focused: boolean }) {

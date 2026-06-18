@@ -15,15 +15,21 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const COLORS = {
-  background: "#F2DEC7",
+  background: "#F6F8FC",
   card: "#FFFFFF",
-  cardBorder: "#E1B8A2",
-  accent: "#CF7D65",
-  accentGreen: "#6B6D43",
-  muted: "#ABA66F",
-  textDark: "#4A3728",
+  cardBorder: "#E4ECF8",
+
+  accent: "#4D97FF",
+  accentGreen: "#31C48D",
+
+  muted: "#7B8CA8",
+  textDark: "#23395D",
+
   white: "#FFFFFF",
-  softBlue: "#99B4AA",
+
+  softBlue: "#5AA7FF",
+
+  dark: "#1A2B4B",
 };
 
 interface Props {

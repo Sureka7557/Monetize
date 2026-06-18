@@ -2,10 +2,11 @@ import { View, Text, Pressable } from "react-native";
 import { FONTS } from "../app/constants/fonts";
 
 const COLORS = {
-  textDark: "#4A3728",
-  accent: "#CF7D65",
-  borderMuted: "#E1B8A2",
-  textMuted: "#6B6D43",
+  textDark: "#23395D",
+  accent: "#4D97FF",
+
+  borderMuted: "#E4ECF8",
+  textMuted: "#7B8CA8",
 };
 
 interface ListHeadingProps {

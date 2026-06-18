@@ -3,12 +3,21 @@ import { FONTS } from "../app/constants/fonts";
 import { formatCurrency } from "../lib/utils";
 
 const COLORS = {
+  background: "#F6F8FC",
   card: "#FFFFFF",
-  cardBorder: "#E1B8A2",
-  accent: "#CF7D65",
-  accentGreen: "#6B6D43",
-  muted: "#ABA66F",
-  textDark: "#4A3728",
+  cardBorder: "#E4ECF8",
+
+  accent: "#4D97FF",
+  accentGreen: "#31C48D",
+
+  muted: "#7B8CA8",
+  textDark: "#23395D",
+
+  white: "#FFFFFF",
+
+  softBlue: "#5AA7FF",
+
+  dark: "#1A2B4B",
 };
 
 interface Props {
